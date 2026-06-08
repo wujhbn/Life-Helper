@@ -95,10 +95,17 @@ export default function CountdownPage() {
                  停止
               </button>
               <button 
-                 onClick={() => { toggleTimer(); speak(isActive ? "暫停" : "繼續"); }} 
-                 className={`flex-1 ${isActive ? 'bg-amber-400 border-amber-600' : 'bg-green-500 border-green-700'} text-white text-lg sm:text-xl font-black py-3 px-6 rounded-xl active:scale-95 transition-all shadow border-b-4 active:border-b-0 active:translate-y-1`}
+                 onClick={() => { 
+                   if (timeLeft === 0) {
+                     resetTimer();
+                   } else {
+                     toggleTimer(); 
+                     speak(isActive ? "暫停" : "繼續"); 
+                   }
+                 }} 
+                 className={`flex-1 ${isActive ? 'bg-amber-400 border-amber-600' : (timeLeft === 0 ? 'bg-blue-500 border-blue-700' : 'bg-green-500 border-green-700')} text-white text-lg sm:text-xl font-black py-3 px-6 rounded-xl active:scale-95 transition-all shadow border-b-4 active:border-b-0 active:translate-y-1`}
               >
-                 {isActive ? '暫停' : '繼續'}
+                 {isActive ? '暫停' : (timeLeft === 0 ? '重置' : '繼續')}
               </button>
             </div>
           </div>

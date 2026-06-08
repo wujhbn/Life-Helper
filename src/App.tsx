@@ -15,6 +15,9 @@ import ChangePage from './pages/features/Change';
 import TasksPage from './pages/features/Tasks';
 import SchedulePage from './pages/features/Schedule';
 import EmergencyPage from './pages/features/Emergency';
+import NotesPage from './pages/features/Notes';
+import AlarmPage from './pages/features/Alarm';
+import WeatherPage from './pages/features/Weather';
 
 export default function App() {
   return (
@@ -31,6 +34,9 @@ export default function App() {
           <Route path="tasks" element={<TasksPage />} />
           <Route path="schedule" element={<SchedulePage />} />
           <Route path="emergency" element={<EmergencyPage />} />
+          <Route path="notes" element={<NotesPage />} />
+          <Route path="alarm" element={<AlarmPage />} />
+          <Route path="weather" element={<WeatherPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

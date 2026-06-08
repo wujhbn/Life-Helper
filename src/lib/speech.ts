@@ -26,7 +26,7 @@ let availableVoices: SpeechSynthesisVoice[] = [];
 if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   const loadVoices = () => {
     availableVoices = window.speechSynthesis.getVoices().filter(v => 
-      v.lang.startsWith('zh') || v.lang.startsWith('en')
+      v.lang.toLowerCase().includes('zh')
     );
   };
   loadVoices();
@@ -82,14 +82,25 @@ export function playSound(type: 'complete' | 'click' | 'alert') {
       oscillator.start();
       oscillator.stop(audioContext.currentTime + 0.5);
     } else if (type === 'alert') {
-      oscillator.type = 'square';
-      oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-      oscillator.frequency.setValueAtTime(880, audioContext.currentTime + 0.2);
-      oscillator.frequency.setValueAtTime(440, audioContext.currentTime + 0.4);
-      gainNode.gain.setValueAtTime(settings.volume * 0.5, audioContext.currentTime);
-      gainNode.gain.linearRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
-      oscillator.start();
-      oscillator.stop(audioContext.currentTime + 0.6);
+      const duration = 3.0; // 3 seconds
+      const repeatCount = 6; // 6 beeps, each 0.5s
+      
+      for (let i = 0; i < repeatCount; i++) {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(800, audioContext.currentTime + i * 0.5);
+        
+        gain.gain.setValueAtTime(0, audioContext.currentTime + i * 0.5);
+        gain.gain.linearRampToValueAtTime(settings.volume * 0.5, audioContext.currentTime + i * 0.5 + 0.05);
+        gain.gain.linearRampToValueAtTime(0, audioContext.currentTime + i * 0.5 + 0.3);
+        
+        osc.start(audioContext.currentTime + i * 0.5);
+        osc.stop(audioContext.currentTime + i * 0.5 + 0.3);
+      }
     } else {
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime(600, audioContext.currentTime);

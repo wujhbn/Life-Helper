@@ -4,14 +4,17 @@ export default function Home() {
   return (
     <div className="p-4 sm:p-6 h-full overflow-y-auto">
       <div className="w-full max-w-sm sm:max-w-md mx-auto mt-4 sm:mt-12 grid grid-cols-3 gap-x-4 gap-y-7 sm:gap-x-6 sm:gap-y-10 pb-10">
+        <FeatureButton to="/calendar" icon="📅" title="日曆" />
+        <FeatureButton to="/schedule" icon="📋" title="今日行程" />
+        <FeatureButton to="/notes" icon="🗒️" title="備忘錄" />
         <FeatureButton to="/timer" icon="⏰" title="計時器" />
         <FeatureButton to="/countdown" icon="⌛" title="倒數計時" />
-        <FeatureButton to="/calendar" icon="📅" title="日曆" />
+        <FeatureButton to="/alarm" icon="🔔" title="鬧鐘" />
         <FeatureButton to="/calculator" icon="🧮" title="計算機" />
         <FeatureButton to="/discount" icon="💰" title="折扣計算" />
         <FeatureButton to="/change" icon="💵" title="找錢練習" />
+        <FeatureButton to="/weather" icon="⛅" title="現在天氣" />
         <FeatureButton to="/tasks" icon="📝" title="工作步驟" />
-        <FeatureButton to="/schedule" icon="📋" title="今日行程" />
         <FeatureButton to="/emergency" icon="☎️" title="緊急聯絡" />
       </div>
     </div>

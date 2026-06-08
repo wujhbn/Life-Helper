@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
-  "requestFramePermissions": [],
+  "name": "生活小幫手",
+  "description": "提供工作步驟、今日行程、緊急聯絡、備忘錄、鬧鐘與現在天氣等功能的日常輔助工具。",
+  "requestFramePermissions": ["geolocation"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

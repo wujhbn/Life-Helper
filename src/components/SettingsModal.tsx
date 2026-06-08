@@ -37,7 +37,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           </label>
 
           <label className="flex flex-col gap-1 bg-slate-100 p-3 rounded-2xl">
-            <span className="text-xl font-bold text-slate-700">選擇聲音 (男女聲)</span>
+            <span className="text-xl font-bold text-slate-700">選擇聲音</span>
             <select 
               className="w-full text-lg p-2 rounded-xl bg-white border-2 border-slate-300 font-bold text-slate-600"
               value={settings.voiceURI}

@@ -74,7 +74,7 @@ export default function ChangePage() {
                 {['7','8','9','4','5','6','1','2','3'].map(n => (
                   <button key={n} onClick={() => handleNum(n)} className={btnClass}>{n}</button>
                 )) }
-                <button onClick={() => { speak('清除'); if(step===1) setPrice(''); else setPaid(''); }} className="bg-rose-100 border-b-4 border-rose-300 rounded-xl text-xl font-black text-rose-700 hover:bg-rose-200 active:border-b-0 active:translate-y-1 transition-all shadow-sm">清</button>
+                <button onClick={() => { speak('清除'); if(step===1) setPrice(''); else setPaid(''); }} className="bg-rose-100 border-b-4 border-rose-300 rounded-xl text-xl font-black text-rose-700 hover:bg-rose-200 active:border-b-0 active:translate-y-1 transition-all shadow-sm">清除 C</button>
                 <button onClick={() => handleNum('0')} className={btnClass}>0</button>
                 <button onClick={() => handleNum('00')} className={btnClass}>00</button>
               </div>

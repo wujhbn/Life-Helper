@@ -83,7 +83,7 @@ export default function CalculatorPage() {
 
         {/* Keypad */}
         <div className="grid grid-cols-4 gap-2 flex-1 min-h-0">
-          <button onClick={handleClear} className="col-span-2 bg-red-100 border-b-4 border-red-300 rounded-2xl text-xl sm:text-2xl font-black text-red-700 hover:bg-red-200 active:border-b-0 active:translate-y-1 transition-all shadow-sm">C 清除</button>
+          <button onClick={handleClear} className="col-span-2 bg-red-100 border-b-4 border-red-300 rounded-2xl text-xl sm:text-2xl font-black text-red-700 hover:bg-red-200 active:border-b-0 active:translate-y-1 transition-all shadow-sm">清除 C</button>
           <button onClick={() => handleOp('÷')} className={opClass}>÷</button>
           <button onClick={() => handleOp('×')} className={opClass}>×</button>
 
