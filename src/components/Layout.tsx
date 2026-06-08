@@ -16,28 +16,31 @@ export default function Layout() {
   const dateString = time.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
 
   return (
-    <div className="w-full h-[100dvh] bg-[#F1F5F9] flex flex-col font-sans overflow-hidden select-none relative">
+    <div className="w-full h-[100dvh] bg-[#F2F2F7] flex flex-col font-sans overflow-hidden select-none relative">
       {/* Top Status Bar */}
-      <header className="h-14 sm:h-16 bg-blue-700 text-white flex items-center justify-between px-3 shadow-md shrink-0 z-10 rounded-b-lg">
+      <header className="h-14 sm:h-16 bg-white/70 backdrop-blur-xl border-b border-slate-200/80 text-black flex items-center justify-between px-3 sm:px-5 shrink-0 z-10 relative">
         <div className="flex items-center gap-2">
-          <Link to="/" className="bg-white/20 p-1.5 rounded-full hover:bg-white/30 transition-colors focus:ring-4 focus:ring-white flex-shrink-0">
-            <span className="text-xl sm:text-2xl leading-none block">🏠</span>
+          <Link to="/" className="p-1 px-2 text-blue-500 hover:text-blue-600 transition-colors active:opacity-70 flex-shrink-0 flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 sm:w-7 sm:h-7">
+              <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.06 1.06l8.69-8.69z" />
+              <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
+            </svg>
           </Link>
-          <h1 className="text-xl sm:text-2xl font-black tracking-tight truncate">生活小幫手</h1>
+          <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-800">生活小幫手</h1>
         </div>
-        <div className="flex flex-col items-end flex-shrink-0 pl-2">
-          <div className="text-xl sm:text-3xl font-mono font-bold leading-none">{timeString}</div>
-          <div className="text-xs sm:text-sm font-bold opacity-90">{dateString}</div>
+        <div className="flex flex-col items-end flex-shrink-0 pr-1">
+          <div className="text-lg sm:text-xl font-semibold tracking-tight text-slate-800">{timeString}</div>
+          <div className="text-[10px] sm:text-xs font-semibold text-slate-500 tracking-wide">{dateString}</div>
         </div>
       </header>
 
       {/* Main Area */}
-      <main className="flex-grow overflow-hidden flex flex-col pt-2 pb-2 h-full min-h-0 relative">
+      <main className="flex-grow overflow-hidden flex flex-col h-full min-h-0 relative z-0">
         <Outlet />
       </main>
 
       {/* Bottom Accessibility Controls */}
-      <footer className="h-12 sm:h-14 bg-slate-200 flex items-center justify-between px-3 sm:px-4 border-t-2 border-slate-300 shrink-0 z-10">
+      <footer className="h-12 sm:h-14 bg-white/70 backdrop-blur-xl border-t border-slate-200/80 flex items-center justify-between px-3 sm:px-5 shrink-0 z-10 relative">
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse border border-green-600 shrink-0"></div>
           <span className="text-sm font-bold text-slate-700 truncate">語音輔助中</span>
