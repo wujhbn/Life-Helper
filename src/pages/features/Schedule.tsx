@@ -6,7 +6,6 @@ import { ScheduleItem } from '../../types';
 
 export default function SchedulePage() {
   const [items, setItems] = useState<ScheduleItem[]>([]);
-  
   const todayStr = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
@@ -25,9 +24,7 @@ export default function SchedulePage() {
         { time: '18:00', title: '吃晚餐', icon: '🍲', completed: false, order: 3, date: todayStr },
         { time: '21:00', title: '睡覺', icon: '🛌', completed: false, order: 4, date: todayStr },
       ];
-      for (const p of presets) {
-        await db.add('schedule', p);
-      }
+      for (const p of presets) { await db.add('schedule', p); }
       const loaded = await db.getAllFromIndex('schedule', 'by-date', todayStr);
       setItems(loaded.sort((a,b) => a.order - b.order));
     } else {
@@ -40,10 +37,7 @@ export default function SchedulePage() {
     const db = await initDB();
     item.completed = !item.completed;
     await db.put('schedule', item);
-    if (item.completed) {
-      playSound('click');
-      speak(`${item.title} 完成`);
-    }
+    if (item.completed) { playSound('click'); speak(`${item.title} 完成`); }
     loadItems();
   };
 
@@ -75,61 +69,52 @@ export default function SchedulePage() {
 
   const readSchedule = () => {
     const uncompleted = items.filter(i => !i.completed);
-    if (uncompleted.length === 0) {
-      speak("今天的所有行程都完成了");
-    } else {
-      let text = "接下來要：";
-      uncompleted.slice(0, 3).forEach(item => {
-        text += `${item.time} ${item.title}，`;
-      });
-      speak(text);
-    }
+    if (uncompleted.length === 0) { speak("所有行程都完成了"); } 
+    else { speak("接下來要：" + uncompleted.slice(0, 3).map(i => `${i.time} ${i.title}`).join('，')); }
   };
 
   return (
     <PageContainer title="今日行程" icon="📋" color="border-amber-500">
-      <div className="flex flex-col h-full gap-6 max-w-4xl mx-auto w-full">
+      <div className="flex flex-col h-full gap-2 max-w-4xl mx-auto w-full overflow-hidden">
         
-        <div className="flex justify-between items-center bg-amber-50 p-6 rounded-3xl border-4 border-amber-200 shrink-0">
-          <div className="text-3xl font-black text-amber-800">
+        <div className="flex justify-between items-center bg-amber-50 p-3 rounded-2xl border-2 border-amber-200 shrink-0">
+          <div className="text-xl sm:text-2xl font-black text-amber-800">
             {todayStr.replace(/-/g, ' / ')}
           </div>
           <button 
             onClick={readSchedule}
-            className="bg-white border-2 border-amber-300 text-amber-700 font-bold px-6 py-3 rounded-xl shadow active:scale-95 text-2xl flex items-center gap-2 hover:bg-amber-100"
+            className="bg-white border-2 border-amber-300 text-amber-700 font-bold px-3 py-1.5 rounded-xl shadow-sm active:scale-95 text-lg flex items-center gap-1 hover:bg-amber-100"
           >
-            <span>🔊</span> 唸出行程
+            <span>🔊</span> 唸出
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto pr-2 rounded-3xl">
-          <div className="flex flex-col gap-4 pb-12">
+        <div className="flex-1 overflow-y-auto pr-1">
+          <div className="flex flex-col gap-2 pb-4">
             {items.map((item, idx) => (
               <div 
                 key={item.id}
-                className={`flex justify-between items-center bg-white p-6 rounded-3xl shadow-md border-4 transition-all ${item.completed ? 'border-slate-200 bg-slate-50 opacity-60' : 'border-amber-200 cursor-pointer active:scale-[0.98] hover:border-amber-400'}`}
+                className={`flex justify-between items-center bg-white p-3 rounded-2xl shadow-sm border-2 transition-all ${item.completed ? 'border-slate-200 bg-slate-50 opacity-70' : 'border-amber-200 cursor-pointer active:scale-[0.98] hover:border-amber-400'}`}
                 onClick={(e) => { if(!item.completed) { toggleItem(e, item); } }}
               >
-                {/* Checkbox */}
                 <button 
                   onClick={(e) => toggleItem(e, item)}
-                  className={`w-16 h-16 rounded-2xl flex items-center justify-center border-4 mr-6 shrink-0 transition-colors ${item.completed ? 'bg-green-500 border-green-600 text-white shadow-inner' : 'bg-white border-slate-300'}`}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 mr-3 shrink-0 transition-colors ${item.completed ? 'bg-green-500 border-green-600 text-white shadow-inner' : 'bg-white border-slate-300'}`}
                 >
-                  {item.completed && <span className="text-4xl leading-none">✓</span>}
+                  {item.completed && <span className="text-2xl leading-none">✓</span>}
                 </button>
 
-                <div className="flex-1 flex items-center gap-6">
-                  <div className={`text-6xl ${item.completed ? 'grayscale' : ''}`}>{item.icon}</div>
-                  <div className="flex flex-col">
-                    <span className="text-2xl font-bold text-slate-400">{item.time}</span>
-                    <span className={`text-4xl font-black ${item.completed ? 'text-slate-500 line-through' : 'text-slate-800'}`}>{item.title}</span>
+                <div className="flex-1 flex items-center gap-3 min-w-0">
+                  <div className={`text-3xl shrink-0 ${item.completed ? 'grayscale' : ''}`}>{item.icon}</div>
+                  <div className="flex flex-col truncate">
+                    <span className="text-sm font-bold text-slate-400">{item.time}</span>
+                    <span className={`text-xl font-black truncate ${item.completed ? 'text-slate-500 line-through' : 'text-slate-800'}`}>{item.title}</span>
                   </div>
                 </div>
 
-                {/* Move arrows */}
-                <div className="flex flex-col gap-2 ml-4">
-                  <button onClick={(e) => moveUp(e, idx)} disabled={idx === 0} className="w-12 h-12 bg-slate-100 rounded-xl text-3xl flex flex-col justify-center items-center hover:bg-slate-200 disabled:opacity-30 disabled:invisible active:scale-95 shadow-sm text-slate-500">▲</button>
-                  <button onClick={(e) => moveDown(e, idx)} disabled={idx === items.length - 1} className="w-12 h-12 bg-slate-100 rounded-xl text-3xl flex flex-col justify-center items-center hover:bg-slate-200 disabled:opacity-30 disabled:invisible active:scale-95 shadow-sm text-slate-500">▼</button>
+                <div className="flex flex-col gap-1 ml-2 shrink-0">
+                  <button onClick={(e) => moveUp(e, idx)} disabled={idx === 0} className="w-8 h-8 bg-slate-100 rounded-lg text-lg flex items-center justify-center hover:bg-slate-200 disabled:opacity-30 disabled:invisible active:scale-95 text-slate-500">▲</button>
+                  <button onClick={(e) => moveDown(e, idx)} disabled={idx === items.length - 1} className="w-8 h-8 bg-slate-100 rounded-lg text-lg flex items-center justify-center hover:bg-slate-200 disabled:opacity-30 disabled:invisible active:scale-95 text-slate-500">▼</button>
                 </div>
               </div>
             ))}

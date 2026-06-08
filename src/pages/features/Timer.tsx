@@ -45,63 +45,60 @@ export default function TimerPage() {
   };
 
   const progress = initialTime > 0 ? ((initialTime - timeLeft) / initialTime) * 100 : 0;
-
   const quickButtons = [1, 3, 5, 10, 30];
 
   return (
     <PageContainer title="計時器" icon="⏰" color="border-rose-400">
-      <div className="flex flex-col h-full gap-8">
+      <div className="flex flex-col h-full gap-2 max-h-full min-h-0 pb-1">
         
         {/* Quick Settings */}
-        <div className="flex flex-wrap justify-center gap-4 shrink-0">
+        <div className="flex justify-center gap-2 shrink-0 flex-wrap pb-2 border-b-2 border-slate-100">
           {quickButtons.map(m => (
             <button 
               key={m}
               onClick={() => { setTimer(m); speak(`設定${m}分鐘`); }}
-              className="bg-rose-100 hover:bg-rose-200 text-rose-800 text-3xl font-black py-4 px-8 rounded-2xl active:scale-95 transition-all outline-none focus:ring-4 focus:ring-rose-400 shadow-md border-4 border-rose-300"
+              className="bg-rose-100 hover:bg-rose-200 text-rose-800 text-sm font-black py-2 px-3 rounded-lg active:scale-95 transition-all outline-none focus:ring-2 focus:ring-rose-400 shadow-sm border-2 border-rose-300 flex-1 min-w-[50px] max-w-[80px]"
             >
-              {m} 分鐘
+              {m}分
             </button>
           ))}
         </div>
 
         {/* Display */}
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <div className="relative w-64 h-64 sm:w-96 sm:h-96 flex items-center justify-center">
+        <div className="flex-1 flex flex-col items-center justify-center min-h-0">
+          <div className="relative w-[55vw] max-w-[200px] aspect-square flex items-center justify-center shrink-0">
             <svg className="absolute w-full h-full transform -rotate-90">
               <circle cx="50%" cy="50%" r="45%" className="fill-none stroke-rose-100" strokeWidth="10%" />
               <circle 
-                cx="50%" 
-                cy="50%" 
-                r="45%" 
+                cx="50%" cy="50%" r="45%" 
                 className="fill-none stroke-rose-500 transition-all duration-1000 ease-linear" 
                 strokeWidth="10%" 
-                strokeDasharray="283%" /* 2 * pi * 45 = 282.7 */
+                strokeDasharray="283%"
                 strokeDashoffset={`${283 - (progress / 100) * 283}%`}
               />
             </svg>
-            <div className="text-6xl sm:text-8xl font-mono font-black text-rose-600 z-10">
+            <div className="text-4xl sm:text-6xl font-mono font-black text-rose-600 z-10 tracking-tighter">
               {formatTime(timeLeft)}
             </div>
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex justify-center gap-6 shrink-0 pb-4">
+        <div className="flex justify-center gap-2 shrink-0">
           <button 
             onClick={() => { resetTimer(); speak("重置"); }}
             disabled={timeLeft === 0 && initialTime === 0}
-            className="bg-slate-200 hover:bg-slate-300 text-slate-700 text-3xl font-black py-6 px-12 rounded-[2rem] active:scale-95 transition-all disabled:opacity-50 shadow-lg border-b-8 border-slate-400 active:border-b-0 active:translate-y-2 flex items-center gap-2"
+            className="bg-slate-200 text-slate-700 text-base sm:text-lg font-black py-3 px-4 rounded-xl active:scale-95 transition-all disabled:opacity-50 shadow-sm border-b-4 border-slate-400 active:border-b-0 active:translate-y-1 flex items-center gap-1 flex-1 max-w-[120px] justify-center"
           >
-            <span>🔄</span> 重置
+            <span className="text-xl">🔄</span> 重置
           </button>
           
           <button 
             onClick={() => { toggleTimer(); speak(isActive ? "暫停" : "開始"); }}
             disabled={timeLeft === 0}
-            className={`${isActive ? 'bg-amber-400 hover:bg-amber-500 border-amber-600' : 'bg-green-500 hover:bg-green-600 border-green-700'} text-white text-3xl font-black py-6 px-16 rounded-[2rem] active:scale-95 transition-all disabled:opacity-50 shadow-lg border-b-8 active:border-b-0 active:translate-y-2 flex items-center gap-2`}
+            className={`${isActive ? 'bg-amber-400 border-amber-600' : 'bg-green-500 border-green-700'} text-white text-base sm:text-lg font-black py-3 px-4 rounded-xl active:scale-95 transition-all disabled:opacity-50 shadow-sm border-b-4 active:border-b-0 active:translate-y-1 flex items-center gap-1 flex-1 max-w-[120px] justify-center`}
           >
-            {isActive ? <><span>⏸️</span> 暫停</> : <><span>▶️</span> 開始</>}
+            {isActive ? <><span className="text-xl">⏸️</span> 暫停</> : <><span className="text-xl">▶️</span> 開始</>}
           </button>
         </div>
       </div>
