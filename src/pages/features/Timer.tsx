@@ -48,7 +48,7 @@ export default function TimerPage() {
   const quickButtons = [1, 3, 5, 10, 30];
 
   return (
-    <PageContainer title="計時器" icon="⏰" color="border-rose-400">
+    <PageContainer title="碼錶" icon="⏱️" color="border-rose-400">
       <div className="flex flex-col h-full gap-2 max-h-full min-h-0 pb-1">
         
         {/* Quick Settings */}

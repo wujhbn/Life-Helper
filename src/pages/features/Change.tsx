@@ -44,11 +44,11 @@ export default function ChangePage() {
 
   const currentVal = step === 1 ? price : paid;
 
-  const btnClass = "bg-white border-b-4 border-slate-300 rounded-xl text-xl sm:text-2xl font-black text-slate-700 hover:bg-slate-50 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center py-2 shadow-sm";
+  const btnClass = "bg-white border-b-4 border-slate-300 rounded-2xl text-2xl sm:text-4xl font-black text-slate-700 hover:bg-slate-50 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center p-2 sm:p-3 shadow-sm";
 
   return (
     <PageContainer title="找錢練習" icon="💵" color="border-teal-500">
-      <div className="flex flex-col h-full gap-2 max-w-5xl mx-auto w-full min-h-0 overflow-y-auto">
+      <div className="flex flex-col h-full gap-2 max-w-md mx-auto w-full min-h-0 overflow-y-auto pb-4">
         
         {/* Steps Header */}
         <div className="flex justify-between items-center bg-teal-50 rounded-2xl p-2 border-2 border-teal-200 shrink-0">
@@ -60,47 +60,49 @@ export default function ChangePage() {
         </div>
 
         {step < 3 ? (
-          <div className="flex-1 flex flex-col lg:flex-row gap-2 min-h-0">
-            {/* Input & Keypad */}
-            <div className="flex-1 flex flex-col bg-slate-100 rounded-2xl p-3 border-2 border-slate-200">
-              <div className="text-xl font-black text-slate-700 mb-2 text-center">
-                {step === 1 ? "輸入價格" : "輸入給的錢"}
-              </div>
-              <div className="bg-white rounded-xl p-3 text-right shadow-inner border-2 border-slate-200 mb-3 shrink-0">
-                <div className="text-4xl font-black text-slate-800 tracking-tighter truncate h-10">{currentVal || '0'}</div>
-              </div>
+          <div className="flex flex-col w-full bg-slate-100 p-3 sm:p-5 rounded-3xl border-2 border-slate-200 min-h-min shrink-0">
+            <div className="text-xl sm:text-2xl font-black text-slate-700 mb-3 text-center shrink-0">
+              {step === 1 ? "輸入物品價格" : "輸入客人給的錢"}
+            </div>
 
-              <div className="grid grid-cols-3 gap-2 flex-grow min-h-[140px]">
-                {['7','8','9','4','5','6','1','2','3'].map(n => (
-                  <button key={n} onClick={() => handleNum(n)} className={btnClass}>{n}</button>
-                )) }
-                <button onClick={() => { speak('清除'); if(step===1) setPrice(''); else setPaid(''); }} className="bg-rose-100 border-b-4 border-rose-300 rounded-xl text-xl font-black text-rose-700 hover:bg-rose-200 active:border-b-0 active:translate-y-1 transition-all shadow-sm">清除 C</button>
-                <button onClick={() => handleNum('0')} className={btnClass}>0</button>
-                <button onClick={() => handleNum('00')} className={btnClass}>00</button>
+            {/* Display */}
+            <div className="bg-slate-800 rounded-2xl p-3 sm:p-5 mb-3 text-right overflow-hidden shadow-inner border-2 border-slate-700 shrink-0">
+              <div className="text-4xl sm:text-5xl font-mono font-black text-emerald-400 truncate min-h-[2.5rem] sm:min-h-[3rem]">
+                {currentVal || '0'}
               </div>
             </div>
 
+            {/* Quick Actions (only in step 2) */}
+            {step === 2 && (
+              <div className="grid grid-cols-3 gap-2 mb-3 shrink-0">
+                <button onClick={() => { setPaid('100'); speak('100元'); }} className="bg-green-100 p-2 rounded-2xl text-lg font-bold active:scale-95 shadow-sm border-b-4 border-green-300 hover:bg-green-200 text-green-800 flex items-center justify-center">100</button>
+                <button onClick={() => { setPaid('500'); speak('500元'); }} className="bg-green-100 p-2 rounded-2xl text-lg font-bold active:scale-95 shadow-sm border-b-4 border-green-300 hover:bg-green-200 text-green-800 flex items-center justify-center">500</button>
+                <button onClick={() => { setPaid('1000'); speak('1000元'); }} className="bg-green-100 p-2 rounded-2xl text-lg font-bold active:scale-95 shadow-sm border-b-4 border-green-300 hover:bg-green-200 text-green-800 flex items-center justify-center">1000</button>
+              </div>
+            )}
+
+            {/* Keypad */}
+            <div className="grid grid-cols-3 gap-2 flex-1 min-h-[200px]">
+              {['7','8','9','4','5','6','1','2','3'].map(n => (
+                <button key={n} onClick={() => handleNum(n)} className={btnClass}>{n}</button>
+              )) }
+              <button onClick={() => { speak('清除'); if(step===1) setPrice(''); else setPaid(''); }} className="bg-red-100 border-b-4 border-red-300 rounded-2xl text-lg sm:text-xl font-black text-red-700 hover:bg-red-200 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center p-2 shadow-sm whitespace-nowrap">清除 C</button>
+              <button onClick={() => handleNum('0')} className={btnClass}>0</button>
+              <button onClick={() => handleNum('00')} className="bg-white border-b-4 border-slate-300 rounded-2xl text-xl sm:text-2xl font-black text-slate-700 hover:bg-slate-50 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center p-2 shadow-sm">00</button>
+            </div>
+
             {/* Actions */}
-            <div className="w-full lg:w-64 flex flex-col gap-2 shrink-0">
-              {step === 2 && (
-                <div className="flex-1 bg-green-50 rounded-2xl p-3 border-2 border-green-200 flex flex-col gap-2 min-h-[140px]">
-                  <div className="text-sm font-bold text-green-800 mb-1">快速付整張：</div>
-                  <button onClick={() => { setPaid('100'); speak('100元'); }} className="bg-green-100 p-2 rounded-xl text-lg font-bold flex items-center justify-between hover:bg-green-200 active:scale-95 shadow"><span>一百</span> <span>💵</span></button>
-                  <button onClick={() => { setPaid('500'); speak('500元'); }} className="bg-green-100 p-2 rounded-xl text-lg font-bold flex items-center justify-between hover:bg-green-200 active:scale-95 shadow"><span>五百</span> <span>💷</span></button>
-                  <button onClick={() => { setPaid('1000'); speak('1000元'); }} className="bg-green-100 p-2 rounded-xl text-lg font-bold flex items-center justify-between hover:bg-green-200 active:scale-95 shadow"><span>一千</span> <span>💶</span></button>
-                </div>
-              )}
-              
-              <button 
-                onClick={() => step === 1 ? setStep(2) : calculateChange()}
-                disabled={(step === 1 && !price) || (step === 2 && !paid)}
-                className="bg-teal-500 hover:bg-teal-600 disabled:bg-slate-300 text-white text-xl font-black py-4 rounded-xl active:scale-95 transition-all shadow-md border-b-4 border-teal-700 active:border-b-0 active:translate-y-1 disabled:translate-y-0 disabled:border-slate-400 mt-auto shrink-0"
-              >
-                下一步 ➔
-              </button>
-              {step === 2 && (
-                <button onClick={() => setStep(1)} className="bg-slate-200 py-2 rounded-lg text-sm font-bold text-slate-600 active:scale-95 shrink-0">返回改價格</button>
-              )}
+            <div className="flex gap-2 mt-4 shrink-0">
+               {step === 2 && (
+                <button onClick={() => setStep(1)} className="flex-1 bg-slate-200 py-3 rounded-2xl text-lg sm:text-xl font-black text-slate-600 active:scale-95 border-b-4 border-slate-300 active:border-b-0 active:translate-y-1 shadow-sm shrink-0">返回</button>
+               )}
+               <button 
+                  onClick={() => step === 1 ? setStep(2) : calculateChange()}
+                  disabled={(step === 1 && !price) || (step === 2 && !paid)}
+                  className="flex-[2] bg-teal-500 hover:bg-teal-600 disabled:bg-slate-300 text-white text-xl sm:text-2xl font-black py-4 rounded-2xl active:scale-95 transition-all shadow-md border-b-4 border-teal-700 active:border-b-0 active:translate-y-1 disabled:translate-y-0 disabled:border-slate-400"
+               >
+                  下一步 ➔
+               </button>
             </div>
           </div>
         ) : (

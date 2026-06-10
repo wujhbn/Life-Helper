@@ -46,35 +46,41 @@ export default function CountdownPage() {
   };
 
   return (
-    <PageContainer title="倒數計時" icon="⌛" color="border-orange-400">
-      <div className="flex flex-col h-full gap-2 max-h-full min-h-0 pt-2">
+    <PageContainer title="計時器" icon="⌛" color="border-orange-400">
+      <div className="flex flex-col h-full gap-2 max-h-full min-h-0 pt-2 pb-6">
         {timeLeft === 0 && initialTime === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center gap-4 min-h-0">
-            <div className="flex gap-2 sm:gap-4 items-center text-4xl sm:text-5xl font-mono font-black text-orange-600 max-w-full">
-              <div className="flex flex-col items-center gap-1 bg-orange-50 p-2 sm:p-4 rounded-2xl border-2 border-orange-200 shadow-sm flex-1">
-                <button onPointerDown={() => setH(px => Math.min(23, px + 1))} className="bg-white rounded-lg px-2 sm:px-4 py-1 sm:py-2 shadow active:scale-95 text-xl sm:text-2xl border border-slate-200">▲</button>
-                <span>{h.toString().padStart(2, '0')}</span>
-                <button onPointerDown={() => setH(px => Math.max(0, px - 1))} className="bg-white rounded-lg px-2 sm:px-4 py-1 sm:py-2 shadow active:scale-95 text-xl sm:text-2xl border border-slate-200">▼</button>
-                <span className="text-sm font-sans text-orange-500 mt-1">時</span>
+          <div className="flex-1 flex flex-col items-center justify-center gap-10 min-h-0">
+            <div className="flex gap-2 sm:gap-4 items-center text-5xl sm:text-6xl font-mono font-black text-orange-600 max-w-full">
+              <div className="flex flex-col items-center gap-2 bg-orange-50 p-2 sm:p-4 rounded-[2rem] border-4 border-orange-200 shadow-sm flex-1">
+                <button onPointerDown={() => setH(px => Math.min(23, px + 1))} className="bg-white rounded-2xl px-3 sm:px-5 py-2 shadow-sm active:scale-95 text-xl sm:text-2xl border-2 border-orange-100 text-orange-500">▲</button>
+                <span className="my-2">{h.toString().padStart(2, '0')}</span>
+                <button onPointerDown={() => setH(px => Math.max(0, px - 1))} className="bg-white rounded-2xl px-3 sm:px-5 py-2 shadow-sm active:scale-95 text-xl sm:text-2xl border-2 border-orange-100 text-orange-500">▼</button>
+                <span className="text-base sm:text-lg font-sans text-orange-500 mt-2 font-black">時</span>
               </div>
-              <span className="text-orange-300 pb-4">:</span>
-              <div className="flex flex-col items-center gap-1 bg-orange-50 p-2 sm:p-4 rounded-2xl border-2 border-orange-200 shadow-sm flex-1">
-                <button onPointerDown={() => setM(px => (px + 1) % 60)} className="bg-white rounded-lg px-2 sm:px-4 py-1 sm:py-2 shadow active:scale-95 text-xl sm:text-2xl border border-slate-200">▲</button>
-                <span>{m.toString().padStart(2, '0')}</span>
-                <button onPointerDown={() => setM(px => (px - 1 + 60) % 60)} className="bg-white rounded-lg px-2 sm:px-4 py-1 sm:py-2 shadow active:scale-95 text-xl sm:text-2xl border border-slate-200">▼</button>
-                <span className="text-sm font-sans text-orange-500 mt-1">分</span>
+              <div className="flex flex-col items-center gap-4 text-orange-300 pb-12 font-black text-4xl">
+                <span>.</span>
+                <span>.</span>
               </div>
-              <span className="text-orange-300 pb-4">:</span>
-              <div className="flex flex-col items-center gap-1 bg-orange-50 p-2 sm:p-4 rounded-2xl border-2 border-orange-200 shadow-sm flex-1">
-                <button onPointerDown={() => setS(px => (px + 1) % 60)} className="bg-white rounded-lg px-2 sm:px-4 py-1 sm:py-2 shadow active:scale-95 text-xl sm:text-2xl border border-slate-200">▲</button>
-                <span>{s.toString().padStart(2, '0')}</span>
-                <button onPointerDown={() => setS(px => (px - 1 + 60) % 60)} className="bg-white rounded-lg px-2 sm:px-4 py-1 sm:py-2 shadow active:scale-95 text-xl sm:text-2xl border border-slate-200">▼</button>
-                <span className="text-sm font-sans text-orange-500 mt-1">秒</span>
+              <div className="flex flex-col items-center gap-2 bg-orange-50 p-2 sm:p-4 rounded-[2rem] border-4 border-orange-200 shadow-sm flex-1">
+                <button onPointerDown={() => setM(px => (px + 1) % 60)} className="bg-white rounded-2xl px-3 sm:px-5 py-2 shadow-sm active:scale-95 text-xl sm:text-2xl border-2 border-orange-100 text-orange-500">▲</button>
+                <span className="my-2">{m.toString().padStart(2, '0')}</span>
+                <button onPointerDown={() => setM(px => (px - 1 + 60) % 60)} className="bg-white rounded-2xl px-3 sm:px-5 py-2 shadow-sm active:scale-95 text-xl sm:text-2xl border-2 border-orange-100 text-orange-500">▼</button>
+                <span className="text-base sm:text-lg font-sans text-orange-500 mt-2 font-black">分</span>
+              </div>
+              <div className="flex flex-col items-center gap-4 text-orange-300 pb-12 font-black text-4xl">
+                <span>.</span>
+                <span>.</span>
+              </div>
+              <div className="flex flex-col items-center gap-2 bg-orange-50 p-2 sm:p-4 rounded-[2rem] border-4 border-orange-200 shadow-sm flex-1">
+                <button onPointerDown={() => setS(px => (px + 1) % 60)} className="bg-white rounded-2xl px-3 sm:px-5 py-2 shadow-sm active:scale-95 text-xl sm:text-2xl border-2 border-orange-100 text-orange-500">▲</button>
+                <span className="my-2">{s.toString().padStart(2, '0')}</span>
+                <button onPointerDown={() => setS(px => (px - 1 + 60) % 60)} className="bg-white rounded-2xl px-3 sm:px-5 py-2 shadow-sm active:scale-95 text-xl sm:text-2xl border-2 border-orange-100 text-orange-500">▼</button>
+                <span className="text-base sm:text-lg font-sans text-orange-500 mt-2 font-black">秒</span>
               </div>
             </div>
             <button 
               onClick={startCustom} disabled={h === 0 && m === 0 && s === 0}
-              className="bg-orange-500 hover:bg-orange-600 disabled:bg-slate-300 text-white text-xl sm:text-2xl font-black py-4 px-10 rounded-full active:scale-95 transition-all shadow-md mt-4 border-b-4 border-orange-700 active:border-b-0 active:translate-y-1"
+              className="bg-slate-300 hover:bg-slate-400 disabled:bg-slate-200 disabled:text-white/50 text-white text-2xl font-black py-4 px-12 rounded-full active:scale-95 transition-all shadow-sm mt-4 border-b-8 border-orange-600 active:border-b-4 active:translate-y-1 block max-w-[80%]"
             >
               開始倒數
             </button>

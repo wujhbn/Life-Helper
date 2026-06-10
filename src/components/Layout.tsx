@@ -124,24 +124,20 @@ export default function Layout() {
   };
 
   return (
-    <div className="w-full h-[100dvh] bg-[#F2F2F7] flex flex-col font-sans overflow-hidden select-none relative">
+    <div className="w-full h-[100dvh] bg-[#FFF8F0] flex flex-col font-sans overflow-hidden select-none relative text-slate-700">
       {/* Top Status Bar */}
-      <header className="h-14 sm:h-16 bg-white/70 backdrop-blur-xl border-b border-slate-200/80 text-black flex items-center justify-between px-3 sm:px-5 shrink-0 z-10 relative">
+      <header className="h-16 sm:h-20 bg-[#FFF8F0] text-black flex items-center justify-between px-4 sm:px-6 shrink-0 z-10 relative">
         <div className="flex items-center gap-2">
-          <Link to="/" className="p-1 px-2 text-blue-500 hover:text-blue-600 transition-colors active:opacity-70 flex-shrink-0 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 sm:w-10 sm:h-10">
-              <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.06 1.06l8.69-8.69z" />
-              <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-            </svg>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-800 ml-1">生活小幫手</h1>
+          <Link to="/" className="p-1 px-[10px] bg-white rounded-full border-4 border-orange-200 shadow-sm text-orange-500 hover:text-orange-600 transition-transform active:scale-90 flex-shrink-0 flex items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-black tracking-widest text-slate-700 py-1 px-2">生活小幫手</h1>
           </Link>
         </div>
         <div 
-          className="flex flex-col items-end flex-shrink-0 pr-1 cursor-pointer active:opacity-60 transition-opacity"
+          className="flex flex-col items-end flex-shrink-0 px-3 py-1 bg-white rounded-2xl border-4 border-orange-200 shadow-sm cursor-pointer active:scale-95 transition-transform"
           onClick={handleTimeClick}
         >
-          <div className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-800">{timeString}</div>
-          <div className="text-xs sm:text-sm font-semibold text-slate-500 tracking-wide">{dateString}</div>
+          <div className="text-xl sm:text-2xl font-black tracking-widest text-orange-500">{timeString}</div>
+          <div className="text-[10px] sm:text-xs font-bold text-orange-400 tracking-wide">{dateString}</div>
         </div>
       </header>
 
@@ -170,14 +166,14 @@ export default function Layout() {
       )}
 
       {/* Bottom Accessibility Controls */}
-      <footer className="bg-white/70 backdrop-blur-xl border-t border-slate-200/80 flex items-center justify-between px-3 sm:px-5 pt-3 pb-[calc(env(safe-area-inset-bottom)+12px)] shrink-0 z-10 relative">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse border border-green-600 shrink-0"></div>
-          <span className="text-sm font-bold text-slate-700 truncate">語音輔助中</span>
+      <footer className="bg-[#FFF8F0] flex items-center justify-between px-4 sm:px-6 pt-2 pb-[calc(env(safe-area-inset-bottom)+16px)] shrink-0 z-10 relative">
+        <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border-4 border-green-200 shadow-sm">
+          <div className="w-3 h-3 bg-green-400 rounded-full animate-bounce shrink-0 mt-1"></div>
+          <span className="text-sm font-bold text-green-600 truncate tracking-wider">語音輔助中</span>
         </div>
         <div className="flex gap-2">
-          <button onClick={() => setShowSettings(true)} className="bg-white px-3 sm:px-4 py-1 sm:py-1.5 rounded-full border-2 border-slate-400 font-bold text-sm flex items-center gap-1 hover:bg-slate-50 transition-colors active:scale-95 whitespace-nowrap shadow-sm">
-            <span className="text-base sm:text-lg leading-none">⚙️</span> 聲音/設定
+          <button onClick={() => setShowSettings(true)} className="bg-white px-4 py-2 rounded-full border-4 border-orange-200 font-bold text-sm flex items-center gap-1 text-orange-500 hover:bg-orange-50 transition-transform active:scale-90 shadow-sm">
+            <span className="text-lg leading-none">⚙️</span> 設定
           </button>
         </div>
       </footer>

@@ -45,7 +45,7 @@ export default function AlarmPage() {
   };
 
   return (
-    <PageContainer title="鬧鐘" icon="🔔" color="border-sky-400">
+    <PageContainer title="鬧鐘" icon="⏰" color="border-sky-400">
       <div className="flex flex-col h-full w-full px-2 gap-4">
         {!isEditing ? (
           <>
