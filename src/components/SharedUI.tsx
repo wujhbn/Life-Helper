@@ -11,7 +11,7 @@ export const PageContainer = ({ title, icon, color, children }: { title: string,
           {title}
         </h2>
       </div>
-      <div className="flex-1 pt-12 flex flex-col min-h-0 w-full overflow-hidden">
+      <div className="flex-1 pt-12 flex flex-col min-h-0 w-full overflow-y-auto">
         {children}
       </div>
     </div>

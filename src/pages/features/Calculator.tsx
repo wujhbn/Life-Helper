@@ -64,15 +64,15 @@ export default function CalculatorPage() {
     setWaitingForNewVal(false);
   };
 
-  const btnClass = "bg-white border-b-4 border-slate-300 rounded-2xl text-2xl sm:text-4xl font-black text-slate-700 hover:bg-slate-50 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center p-3 shadow-sm";
-  const opClass = "bg-green-100 border-b-4 border-green-300 rounded-2xl text-2xl sm:text-4xl font-black text-green-800 hover:bg-green-200 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center p-3 shadow-sm";
+  const btnClass = "bg-white border-b-4 border-slate-300 rounded-2xl text-xl sm:text-4xl font-black text-slate-700 hover:bg-slate-50 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center p-2 sm:p-3 shadow-sm";
+  const opClass = "bg-green-100 border-b-4 border-green-300 rounded-2xl text-xl sm:text-4xl font-black text-green-800 hover:bg-green-200 active:border-b-0 active:translate-y-1 transition-all flex items-center justify-center p-2 sm:p-3 shadow-sm";
 
   return (
     <PageContainer title="計算機" icon="🧮" color="border-green-500">
-      <div className="flex flex-col h-full max-w-sm mx-auto w-full bg-slate-100 p-3 sm:p-6 rounded-3xl border-2 border-slate-200 min-h-0">
+      <div className="flex flex-col flex-1 max-w-sm mx-auto w-full bg-slate-100 p-2 sm:p-5 mb-4 rounded-3xl border-2 border-slate-200 min-h-0">
         
         {/* Display */}
-        <div className="bg-slate-800 rounded-2xl p-4 sm:p-5 mb-3 text-right overflow-hidden shadow-inner border-2 border-slate-700 shrink-0">
+        <div className="bg-slate-800 rounded-2xl p-3 sm:p-5 mb-2 text-right overflow-hidden shadow-inner border-2 border-slate-700 shrink-0">
           <div className="text-xl text-slate-400 min-h-[1.5rem] mb-1 font-mono">
            {previousVal !== null ? `${previousVal} ${operator}` : ''}
           </div>
@@ -102,7 +102,7 @@ export default function CalculatorPage() {
           <button onClick={() => handleNum('3')} className={btnClass}>3</button>
           <button onClick={handleEq} className="row-span-2 bg-amber-400 border-b-4 border-amber-600 rounded-2xl text-4xl sm:text-5xl font-black text-white hover:bg-amber-500 active:border-b-0 active:translate-y-1 transition-all shadow-sm flex items-center justify-center">=</button>
 
-          <button onClick={() => handleNum('0')} className="col-span-2 bg-white border-b-4 border-slate-300 rounded-2xl text-2xl sm:text-4xl font-black text-slate-700 hover:bg-slate-50 active:border-b-0 active:translate-y-1 transition-all shadow-sm">0</button>
+          <button onClick={() => handleNum('0')} className="col-span-2 bg-white border-b-4 border-slate-300 rounded-2xl text-xl sm:text-4xl font-black text-slate-700 hover:bg-slate-50 active:border-b-0 active:translate-y-1 transition-all shadow-sm">0</button>
           <button onClick={() => handleNum('.')} className={btnClass}>.</button>
         </div>
 
