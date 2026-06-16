@@ -62,7 +62,7 @@ export default function ChangePage() {
         {step < 3 ? (
           <div className="flex flex-col w-full bg-slate-100 p-3 sm:p-5 rounded-3xl border-2 border-slate-200 min-h-min shrink-0">
             <div className="text-xl sm:text-2xl font-black text-slate-700 mb-3 text-center shrink-0">
-              {step === 1 ? "輸入物品價格" : "輸入客人給的錢"}
+              {step === 1 ? "輸入物品價格" : "輸入付款金額"}
             </div>
 
             {/* Display */}
