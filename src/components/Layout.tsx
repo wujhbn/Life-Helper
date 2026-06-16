@@ -3,17 +3,30 @@ import { useState, useEffect, useRef } from 'react';
 import SettingsModal from './SettingsModal';
 import { speak } from '../lib/speech';
 import { initDB } from '../lib/db';
+import ReloadPrompt from './ReloadPrompt';
+import { getItem } from '../lib/storage';
 
 export default function Layout() {
   const [time, setTime] = useState(new Date());
   const location = useLocation();
   const [showSettings, setShowSettings] = useState(false);
   const [activeAlarmNotification, setActiveAlarmNotification] = useState<{label: string, time: string, isSchedule?: boolean} | null>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  
   const lastTriggeredTime = useRef<string | null>(null);
   const lastTriggeredScheduleTime = useRef<string | null>(null);
   const alarmIntervalId = useRef<number | null>(null);
 
+  const triggerNotification = (title: string, body: string) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '/icon-192x192.png' });
+    }
+  };
+
   const startAlarmSound = () => {
+    if (alarmIntervalId.current !== null) {
+      clearInterval(alarmIntervalId.current);
+    }
     try {
       const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
       const ctx = new AudioContext();
@@ -58,6 +71,24 @@ export default function Layout() {
   };
 
   useEffect(() => {
+    (window as any).triggerTestAlarm = () => {
+      speak('這是一個提醒測試，語音與聲音正常運作中。');
+      triggerNotification('測試提醒', '這是一個提醒測試，通知權限正常。');
+      setActiveAlarmNotification({ label: '此為照顧者測試項目', time: '現在' });
+      startAlarmSound();
+    };
+    return () => {
+      delete (window as any).triggerTestAlarm;
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
     const timer = setInterval(() => {
       const now = new Date();
       setTime(now);
@@ -67,13 +98,13 @@ export default function Layout() {
       
       // Check Normal Alarms
       try {
-        const saved = localStorage.getItem('life-helper-alarms');
-        if (saved) {
-          const alarms = JSON.parse(saved);
+        const alarms = getItem<any[]>('life-helper-alarms', []);
+        if (alarms.length > 0) {
           const activeAlarm = alarms.find((a: any) => a.enabled && a.time === currentHourMin);
           if (activeAlarm && lastTriggeredTime.current !== currentHourMin) {
             lastTriggeredTime.current = currentHourMin;
             speak(`鬧鐘響了！現在時間 ${currentHourMin}，提醒您：${activeAlarm.label}。`);
+            triggerNotification('鬧鐘提醒', activeAlarm.label);
             setActiveAlarmNotification({ label: activeAlarm.label, time: currentHourMin });
             startAlarmSound();
           }
@@ -85,7 +116,12 @@ export default function Layout() {
       // Check Schedule 
       if (currentSec === 0 && lastTriggeredScheduleTime.current !== currentHourMin) {
         lastTriggeredScheduleTime.current = currentHourMin;
-        const todayStr = now.toISOString().split('T')[0];
+        
+        // 使用本地時間組成 YYYY-MM-DD
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        const todayStr = `${y}-${m}-${d}`;
         
         initDB().then(db => {
           db.getAllFromIndex('schedule', 'by-date', todayStr).then(all => {
@@ -93,6 +129,7 @@ export default function Layout() {
              const activeSchedule = uncompleted.find(s => s.time === currentHourMin);
              if (activeSchedule) {
                 speak(`行程提醒：現在時間 ${currentHourMin}，該「${activeSchedule.title}」了。`);
+                triggerNotification('行程提醒', activeSchedule.title);
                 setActiveAlarmNotification({ label: activeSchedule.title, time: currentHourMin, isSchedule: true });
                 startAlarmSound();
              }
@@ -101,7 +138,14 @@ export default function Layout() {
       }
 
     }, 1000);
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      if (alarmIntervalId.current !== null) {
+        clearInterval(alarmIntervalId.current);
+      }
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   const timeString = time.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -124,7 +168,7 @@ export default function Layout() {
   };
 
   return (
-    <div className="w-full h-[100dvh] bg-[#FFF8F0] flex flex-col font-sans overflow-hidden select-none relative text-slate-700">
+    <div className="w-full h-[100dvh] bg-[#FFF8F0] flex flex-col font-sans overflow-hidden select-none relative text-slate-700 pb-[env(safe-area-inset-bottom)]">
       {/* Top Status Bar */}
       <header className="h-16 sm:h-20 bg-[#FFF8F0] text-black flex items-center justify-between px-4 sm:px-6 shrink-0 z-10 relative">
         <div className="flex items-center gap-2">
@@ -145,6 +189,13 @@ export default function Layout() {
       <main className="flex-grow overflow-hidden flex flex-col h-full min-h-0 relative z-0">
         <Outlet />
       </main>
+
+      {!isOnline && (
+        <div className="bg-slate-800 text-amber-300 py-1 px-4 text-center text-sm font-bold flex items-center justify-center gap-2">
+          <span>⚠️</span> 
+          <span>您目前處於離線狀態。大部分功能仍可正常使用，但天氣資訊可能無法更新。</span>
+        </div>
+      )}
 
       {activeAlarmNotification && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -179,6 +230,7 @@ export default function Layout() {
       </footer>
 
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
+      <ReloadPrompt />
     </div>
   );
 }

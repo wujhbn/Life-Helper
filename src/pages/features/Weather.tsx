@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '../../components/SharedUI';
 import { speak } from '../../lib/speech';
+import { getItem, setItem } from '../../lib/storage';
 
 export default function WeatherPage() {
-  const [weather, setWeather] = useState<{temp: number, code: number, time: string, locationName: string} | null>(null);
+  const [weather, setWeather] = useState<{temp: number, code: number, time: string, locationName: string, lastUpdated?: string} | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Weather codes mapping based on WMO standards
@@ -49,15 +50,23 @@ export default function WeatherPage() {
            }
         }
 
-        setWeather({
+        const newWeather = {
           temp: weatherData.current_weather.temperature,
           code: weatherData.current_weather.weathercode,
           time: weatherData.current_weather.time,
-          locationName: locName
-        });
+          locationName: locName,
+          lastUpdated: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
+        };
+        
+        setWeather(newWeather);
+        setItem('lifehelper-weather-cache', newWeather);
         setLoading(false);
       } catch (err) {
         console.error(err);
+        const cached = getItem<any>('lifehelper-weather-cache', null);
+        if (cached) {
+          setWeather(cached);
+        }
         setLoading(false);
       }
     };
@@ -133,13 +142,17 @@ export default function WeatherPage() {
                  <span className="text-2xl">⛅</span> 天氣
                </button>
              </div>
-             <div className="text-xs font-bold text-slate-400 mt-1 text-center">
-               若有允許定位會顯示目前位置天氣<br/>也可點擊畫面任意處朗讀
+             <div className="text-sm font-bold text-slate-400 mt-2 text-center leading-relaxed">
+               {!navigator.onLine && weather.lastUpdated && (
+                 <span className="text-amber-500 block mb-1">⚠️ 離線模式 (最後更新: {weather.lastUpdated})</span>
+               )}
+               點擊畫面任意處朗讀資訊
              </div>
           </div>
         ) : (
           <div className="text-xl font-bold text-slate-500 text-center bg-slate-100 p-6 rounded-3xl">
-            無法取得天氣<br/>請檢查網路連線或定位權限
+            無法取得天氣<br/>
+            {!navigator.onLine ? '目前處於離線狀態，且無最近的快取天氣資訊。' : '請檢查網路連線或定位權限。'}
           </div>
         )}
       </div>

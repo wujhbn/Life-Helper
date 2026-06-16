@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '../../components/SharedUI';
 import { speak } from '../../lib/speech';
+import { getItem, setItem } from '../../lib/storage';
 
 export default function NotesPage() {
   const [notes, setNotes] = useState<{id: number, text: string, date: number}[]>([]);
   const [newNote, setNewNote] = useState('');
 
   useEffect(() => {
-    const saved = localStorage.getItem('life-helper-notes');
-    if (saved) {
-      setNotes(JSON.parse(saved));
-    }
+    const saved = getItem<{id: number, text: string, date: number}[]>('life-helper-notes', []);
+    setNotes(saved);
   }, []);
 
   const saveNotes = (n: any[]) => {
     setNotes(n);
-    localStorage.setItem('life-helper-notes', JSON.stringify(n));
+    setItem('life-helper-notes', n);
   };
 
   const addNote = () => {

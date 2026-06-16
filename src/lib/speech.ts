@@ -1,3 +1,5 @@
+import { getItem, setItem } from './storage';
+
 export interface AppSettings {
   volume: number;
   muted: boolean;
@@ -11,15 +13,12 @@ const defaultSettings: AppSettings = {
 };
 
 export function getSettings(): AppSettings {
-  try {
-    const s = localStorage.getItem('lifehelper-settings');
-    if (s) return { ...defaultSettings, ...JSON.parse(s) };
-  } catch (e) {}
-  return defaultSettings;
+  const s = getItem<Partial<AppSettings>>('lifehelper-settings', {});
+  return { ...defaultSettings, ...s };
 }
 
 export function saveSettings(s: AppSettings) {
-  localStorage.setItem('lifehelper-settings', JSON.stringify(s));
+  setItem('lifehelper-settings', s);
 }
 
 let availableVoices: SpeechSynthesisVoice[] = [];

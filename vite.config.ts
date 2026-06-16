@@ -10,22 +10,57 @@ export default defineConfig(() => {
       react(), 
       tailwindcss(),
       VitePWA({
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/api\.open-meteo\.com\/.*/i,
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'weather-api-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 // 24 hours
+                },
+                networkTimeoutSeconds: 10,
+              }
+            },
+            {
+              urlPattern: /^https:\/\/api\.bigdatacloud\.net\/.*/i,
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'location-api-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 // 24 hours
+                },
+                networkTimeoutSeconds: 10,
+              }
+            }
+          ]
+        },
         manifest: {
           name: '生活小幫手 Life Helper',
           short_name: '生活小幫手',
           description: '專為特教需求與認知障礙設計的生活輔助工具',
+          start_url: '/',
+          scope: '/',
+          display: 'standalone',
           theme_color: '#ffffff',
+          background_color: '#ffffff',
           icons: [
             {
-              src: 'pwa-192x192.png',
+              src: 'icon-192x192.png',
               sizes: '192x192',
-              type: 'image/png'
+              type: 'image/png',
+              purpose: 'any maskable'
             },
             {
-              src: 'pwa-512x512.png',
+              src: 'icon-512x512.png',
               sizes: '512x512',
-              type: 'image/png'
+              type: 'image/png',
+              purpose: 'any maskable'
             }
           ]
         }

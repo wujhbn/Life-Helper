@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '../../components/SharedUI';
 import { speak } from '../../lib/speech';
+import { getItem, setItem } from '../../lib/storage';
 
 interface AlarmItem {
   id: number;
@@ -16,15 +17,13 @@ export default function AlarmPage() {
   const [newLabel, setNewLabel] = useState('起床');
 
   useEffect(() => {
-    const saved = localStorage.getItem('life-helper-alarms');
-    if (saved) {
-      setAlarms(JSON.parse(saved));
-    }
+    const saved = getItem<AlarmItem[]>('life-helper-alarms', []);
+    setAlarms(saved);
   }, []);
 
   const saveAlarms = (a: AlarmItem[]) => {
     setAlarms(a);
-    localStorage.setItem('life-helper-alarms', JSON.stringify(a));
+    setItem('life-helper-alarms', a);
   };
 
   const addAlarm = () => {
