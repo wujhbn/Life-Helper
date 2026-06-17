@@ -5,7 +5,7 @@ export default function Home() {
     <div className="flex flex-col flex-1 h-full pt-4 pb-8 sm:pt-6 sm:pb-12 overflow-y-auto w-full items-center">
       <div className="w-full max-w-[320px] sm:max-w-[420px] md:max-w-[560px] lg:max-w-[680px] xl:max-w-[800px] my-auto grid grid-cols-3 md:grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-6 md:gap-x-6 md:gap-y-8 lg:gap-x-8 lg:gap-y-8">
         <FeatureButton to="/calendar" icon="📅" title="日曆" />
-        <FeatureButton to="/schedule" icon="📋" title="今日行程" />
+        <FeatureButton to="/schedule" icon="📋" title="行程" />
         <FeatureButton to="/notes" icon="🗒️" title="備忘錄" />
         <FeatureButton to="/timer" icon="⏱️" title="碼錶" />
         <FeatureButton to="/countdown" icon="⌛" title="計時器" />

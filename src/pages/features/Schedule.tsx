@@ -1,25 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { PageContainer } from '../../components/SharedUI';
 import { speak, playSound } from '../../lib/speech';
 import { initDB } from '../../lib/db';
 import { ScheduleItem } from '../../types';
 
 export default function SchedulePage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [items, setItems] = useState<ScheduleItem[]>([]);
   const [isEditing, setIsEditing] = useState<ScheduleItem | null>(null);
   const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
   const [dragOverItemIndex, setDragOverItemIndex] = useState<number | null>(null);
+  
   const todayStr = new Date().toISOString().split('T')[0];
+  const currentDateStr = searchParams.get('date') || todayStr;
 
   useEffect(() => {
-    loadItems();
-  }, []);
+    loadItems(currentDateStr);
+  }, [currentDateStr]);
 
-  const loadItems = async () => {
+  const loadItems = async (dateStr: string) => {
     const db = await initDB();
-    const all = await db.getAllFromIndex('schedule', 'by-date', todayStr);
+    const all = await db.getAllFromIndex('schedule', 'by-date', dateStr);
     
-    if (all.length === 0) {
+    if (all.length === 0 && dateStr === todayStr) {
       const presets: ScheduleItem[] = [
         { time: '08:00', title: '吃早餐', icon: '🥞', completed: false, order: 0, date: todayStr },
         { time: '09:00', title: '去上學', icon: '🏫', completed: false, order: 1, date: todayStr },
@@ -28,7 +32,7 @@ export default function SchedulePage() {
         { time: '21:00', title: '睡覺', icon: '🛌', completed: false, order: 4, date: todayStr },
       ];
       for (const p of presets) { await db.add('schedule', p); }
-      const loaded = await db.getAllFromIndex('schedule', 'by-date', todayStr);
+      const loaded = await db.getAllFromIndex('schedule', 'by-date', dateStr);
       setItems(loaded.sort((a,b) => a.order - b.order));
     } else {
       setItems(all.sort((a,b) => a.order - b.order));
@@ -41,7 +45,7 @@ export default function SchedulePage() {
     item.completed = !item.completed;
     await db.put('schedule', item);
     if (item.completed) { playSound('click'); speak(`${item.title} 完成`); }
-    loadItems();
+    loadItems(currentDateStr);
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -79,7 +83,7 @@ export default function SchedulePage() {
         }
       }
       setItems(newList);
-      loadItems(); // keep in sync
+      loadItems(currentDateStr); // keep in sync
     }
     
     setDraggedItemIndex(null);
@@ -96,7 +100,7 @@ export default function SchedulePage() {
     if (!id) return;
     const db = await initDB();
     await db.delete('schedule', id);
-    loadItems();
+    loadItems(currentDateStr);
   };
 
   const saveItem = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -110,7 +114,7 @@ export default function SchedulePage() {
     }
     await db.put('schedule', isEditing);
     setIsEditing(null);
-    loadItems();
+    loadItems(currentDateStr);
   };
 
   const deleteItem = async () => {
@@ -118,20 +122,31 @@ export default function SchedulePage() {
     const db = await initDB();
     await db.delete('schedule', isEditing.id);
     setIsEditing(null);
-    loadItems();
+    loadItems(currentDateStr);
+  };
+
+  const changeDate = (offsetDays: number) => {
+    const d = new Date(currentDateStr);
+    d.setDate(d.getDate() + offsetDays);
+    const newDateStr = d.toISOString().split('T')[0];
+    setSearchParams({ date: newDateStr });
   };
 
   return (
-    <PageContainer title="今日行程" icon="📋" color="border-amber-500">
+    <PageContainer title="行程" icon="📋" color="border-amber-500">
       <div className="flex flex-col h-full gap-2 max-w-4xl mx-auto w-full overflow-hidden">
         
         <div className="flex justify-between items-center bg-amber-50 p-3 rounded-2xl border-2 border-amber-200 shrink-0">
-          <div className="text-xl sm:text-2xl font-black text-amber-800">
-            {todayStr.replace(/-/g, ' / ')}
+          <div className="flex items-center gap-2">
+            <button onClick={() => changeDate(-1)} className="px-3 py-1 bg-white rounded-lg shadow-sm font-bold text-amber-700 active:scale-95">◀</button>
+            <div className="text-xl sm:text-2xl font-black text-amber-800 text-center min-w-[140px]">
+              {currentDateStr.replace(/-/g, ' / ')}
+            </div>
+            <button onClick={() => changeDate(1)} className="px-3 py-1 bg-white rounded-lg shadow-sm font-bold text-amber-700 active:scale-95">▶</button>
           </div>
           <div className="flex gap-2">
             <button 
-              onClick={() => setIsEditing({ time: '12:00', title: '', icon: '🌟', completed: false, order: items.length, date: todayStr })}
+              onClick={() => setIsEditing({ time: '12:00', title: '', icon: '🌟', completed: false, order: items.length, date: currentDateStr })}
               className="bg-amber-500 border-b-4 border-amber-700 text-white font-black px-6 py-2 rounded-xl shadow-sm active:border-b-0 active:translate-y-1 text-xl flex flex-row items-center gap-2 whitespace-nowrap transition-all"
             >
               <span>+</span> 新增行程
