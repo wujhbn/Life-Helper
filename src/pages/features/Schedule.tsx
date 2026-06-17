@@ -136,18 +136,18 @@ export default function SchedulePage() {
     <PageContainer title="行程" icon="📋" color="border-amber-500">
       <div className="flex flex-col h-full gap-2 max-w-4xl mx-auto w-full overflow-hidden">
         
-        <div className="flex justify-between items-center bg-amber-50 p-3 rounded-2xl border-2 border-amber-200 shrink-0">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 bg-amber-50 p-3 rounded-2xl border-2 border-amber-200 shrink-0">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
             <button onClick={() => changeDate(-1)} className="px-3 py-1 bg-white rounded-lg shadow-sm font-bold text-amber-700 active:scale-95">◀</button>
-            <div className="text-xl sm:text-2xl font-black text-amber-800 text-center min-w-[140px]">
+            <div className="text-lg sm:text-2xl font-black text-amber-800 text-center flex-1 sm:min-w-[140px]">
               {currentDateStr.replace(/-/g, ' / ')}
             </div>
             <button onClick={() => changeDate(1)} className="px-3 py-1 bg-white rounded-lg shadow-sm font-bold text-amber-700 active:scale-95">▶</button>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full sm:w-auto">
             <button 
               onClick={() => setIsEditing({ time: '12:00', title: '', icon: '🌟', completed: false, order: items.length, date: currentDateStr })}
-              className="bg-amber-500 border-b-4 border-amber-700 text-white font-black px-6 py-2 rounded-xl shadow-sm active:border-b-0 active:translate-y-1 text-xl flex flex-row items-center gap-2 whitespace-nowrap transition-all"
+              className="bg-amber-500 border-b-4 border-amber-700 text-white font-black px-4 sm:px-6 py-2 rounded-xl shadow-sm active:border-b-0 active:translate-y-1 text-base sm:text-xl flex flex-row items-center justify-center gap-2 whitespace-nowrap transition-all w-full sm:w-auto"
             >
               <span>+</span> 新增行程
             </button>
